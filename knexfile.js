@@ -14,9 +14,7 @@ module.exports = {
     seeds: {
       directory: './data/seeds'
     },
-    //turn ferign key enforment on
     pool: {
-      //runs after connection is made to the sql lite engine
       afterCreate: ( conn, done ) => {
         conn.run('PRAGMA freign_keys = ON', done)
       }

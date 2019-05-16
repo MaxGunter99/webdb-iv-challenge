@@ -1,4 +1,4 @@
-const db = require( '../data/dbConfig.js' );
+const db = require('../../data/dbConfig.js');
 
 module.exports = {
     find,
@@ -9,17 +9,27 @@ module.exports = {
 };
 
 function find() {
-    return db( 'dishes' );
+    return db( 'recipes' )        
+    .join("dishes", "recipes.dish_id", "=", "dishes.id")
+    .select("recipes.id", "recipes.name", {
+        dish: "dishes.name"
+    });;
 };
 
 function findById( id ) {
-    return db( 'dishes' )
-        .where({ id })
-        .first();
+    return db( 'recipes' )
+        .where({  "recipes.id" : id })
+        .first()
+        .join("dishes", "recipes.dish_id", "=", "dishes.id")
+        .select("recipes.id", "recipes.name", {
+            dish: "dishes.name"
+        });;
 };
 
+
+
 function add( dish ) {
-    return db( 'dishes' )
+    return db( 'recipes' )
         .insert( dish , 'id' )
         .then(([ id ]) => {
             return findById( id );
@@ -27,7 +37,7 @@ function add( dish ) {
 };
 
 function update( id , changes ) {
-    return db( 'dishes' )
+    return db( 'recipes' )
         .where({ id })
         .update( changes )
         .then( count => {
@@ -40,7 +50,7 @@ function update( id , changes ) {
 };
 
 function remove( id ) {
-    return db( 'dishes' )
+    return db( 'recipes' )
         .where({ id })
         .del();
 };
